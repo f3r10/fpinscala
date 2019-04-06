@@ -1,5 +1,10 @@
+val amm =  Seq("com.lihaoyi" % "ammonite" % "1.6.5" % "test" cross CrossVersion.full)
+
 val commonSettings = Seq(
-  scalaVersion := "2.12.6"
+  scalaVersion := "2.12.6",
+  libraryDependencies ++= {
+    amm
+  }
 )
 
 lazy val root = (project in file("."))

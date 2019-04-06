@@ -187,6 +187,9 @@ object Nonblocking {
     /* Gives us infix syntax for `Par`. */
     implicit def toParOps[A](p: Par[A]): ParOps[A] = new ParOps(p)
 
+    def equal[A](p: Par[A], p2: Par[A]): Par[Boolean] =
+      Par.map2(p, p2)(_ == _)
+
     // infix versions of `map`, `map2`
     class ParOps[A](p: Par[A]) {
       def map[B](f: A => B): Par[B] = Par.map(p)(f)

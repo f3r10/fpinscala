@@ -72,10 +72,6 @@ trait Stream[+A] {
     loop(this, Nil)
   }
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
-    case Some((a,s)) => cons(a, unfold(s)(f))
-    case None        => empty
-  }
 
   def mapWithUnfold[B](f: A => B): Stream[B] = unfold(this){
     case Cons(h, t) => Some((f(h()), t()))
@@ -98,6 +94,9 @@ trait Stream[+A] {
     case (Cons(h, t), Cons(h1, t1)) => Some((f(h(), h1()), (t(), t1())))
     case _ => None
   }
+
+  def zip[B](s2: Stream[B]): Stream[(A,B)] =
+    zipWith(s2)((_,_))
 
   def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = unfold((this, s2)) {
     case (Cons(h, t), Cons(h1, t1)) => Some(((Some(h()), Some(h1())), (t(), t1())))
@@ -149,9 +148,13 @@ object Stream {
   val fibs = _fibs(0, 1)
 
 
-  def onesWithUnfold: Stream[Int] = empty.unfold(1)((a) => Some(a, 1))
-  def fromWithUnfold(n: Int): Stream[Int] = empty.unfold(n)((s) => Some(s, s + 1))
-  def constantWithUnfold[A](a: A): Stream[A] = empty.unfold(a)((s) => Some(s, s))
-  def fibsWithUnfold: Stream[Int] = empty.unfold((0, 1))((s) => Some(s._1, (s._2, s._1 + s._2)))
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+    case Some((a,s)) => cons(a, unfold(s)(f))
+    case None        => empty
+  }
+  // def onesWithUnfounfold(1)((a) => Some(a, 1))
+  // def fromWithUnfold(n: Int): Stream[Int] = empty.unfold(n)((s) => Some(s, s + 1))
+  // def constantWithUnfold[A](a: A): Stream[A] = empty.unfold(a)((s) => Some(s, s))
+  // def fibsWithUnfold: Stream[Int] = empty.unfold((0, 1))((s) => Some(s._1, (s._2, s._1 + s._2)))
 
 }

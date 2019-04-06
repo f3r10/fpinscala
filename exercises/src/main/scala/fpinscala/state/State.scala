@@ -36,6 +36,10 @@ object RNG {
     (if (i1 < 0) -(i1 + 1) else i1, rng2)
   }
 
+  def boolean: Rand[Boolean] = {
+    map(nonNegativeInt)(i => i%2==0)
+  }
+
   def doubleWithMap(rng: RNG): Rand[Double] = 
     map(nonNegativeInt)(i => i / (Int.MaxValue.toDouble + 1))
 
