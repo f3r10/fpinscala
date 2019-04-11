@@ -159,6 +159,12 @@ object Gen {
       (f, rng2)
     }
   }
+  
+  //generate strings
+  def stringN(n: Int): Gen[String] =
+    listOfN(n, choose(0,127)).map(_.map(_.toChar).mkString)
+
+  val string: SGen[String] = SGen(stringN)
 }
 
 sealed trait Result {
