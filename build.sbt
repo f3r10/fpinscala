@@ -17,7 +17,12 @@ lazy val root = (project in file("."))
 lazy val exercises = (project in file("exercises"))
   .settings(commonSettings)
   .settings(
-    name := "exercises"
+    name := "exercises",
+    sourceGenerators in Test += Def.task {
+      val file = (sourceManaged in Test).value / "amm.scala"
+      IO.write(file, """object amm extends App { ammonite.Main.main(args) }""")
+      Seq(file)
+    }.taskValue
   )
 
 lazy val answers = (project in file("answers"))
