@@ -117,7 +117,6 @@ object Monoid {
 
   def parFoldMap[A, B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] =
     Par.parMap(v)(f).flatMap(isb => foldMapV(isb, par(m))(a => Par.lazyUnit(a)))
-    
 
   val wcMonoid: Monoid[WC] = new Monoid[WC] {
     def op(p1: WC, p2: WC): WC =
